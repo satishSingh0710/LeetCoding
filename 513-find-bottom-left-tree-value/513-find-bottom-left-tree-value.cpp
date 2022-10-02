@@ -11,21 +11,17 @@
  */
 class Solution {
 public:
+    int res = 0;
+    int maxLevel = INT_MIN;
     int findBottomLeftValue(TreeNode* root) {
-        if (!root) return 0;
-        int res;
-        queue<TreeNode*> q;
-        q.push(root);
-        while (!q.empty()){
-            int size = q.size();
-            for(int i = 0;i<size;i++){
-                TreeNode * temp = q.front(); q.pop();
-                if (i==0) res = temp->val;
-                if (temp->left){q.push(temp->left);}
-                if (temp->right){q.push(temp->right);}
-            }
-        }
-         
+       solve(root,0);  
         return res;
+    }
+    
+    void solve(TreeNode * root, int level){
+        if (!root) return;
+        if (level>maxLevel){  maxLevel = level; res = root->val;}
+        solve(root->left,level+1); 
+        solve(root->right,level+1);
     }
 };
