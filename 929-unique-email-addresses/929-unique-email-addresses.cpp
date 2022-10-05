@@ -1,26 +1,28 @@
 class Solution {
 public:
     int numUniqueEmails(vector<string>& emails) {
-        unordered_map<string,int>res;
-        for (int i = 0;i<emails.size();i++){
-            string mail = ""; bool foundPlus = false,foundAt = false;
-            for (int j = 0;j<emails[i].size();j++){
-                cout<<mail<<endl;
-                char c = emails[i][j];
-                if (c=='.' && foundAt == false)continue;
-                if (c=='+'){
-                   foundPlus = true;
-                } if (c=='@'){
-                       mail.push_back(c);
-                   foundPlus = false;
-                   foundAt = true;
+        unordered_set<string> s;
+        
+        for (string &x: emails){
+                    bool foundAt = false, foundPlus = false;
+
+            string local = "";
+            for (char &y: x){
+                if (foundPlus==false){
+                     if (y=='@'){foundAt = true;}
+                    if (y =='.'&&foundAt==false) continue;
+                    if (y=='+'){foundPlus = true; continue;}
+                    local.push_back(y);
                 }else{
-                    if (foundPlus==false)
-                    mail.push_back(c);
+                    if (y=='@'){foundAt = true;}
+                    if (foundAt){
+                        local.push_back(y);
+                    }
                 }
             }
-            res[mail]++;
+           cout<<local<<endl;
+            s.insert(local);
         }
-        return res.size();
+        return s.size();
     }
 };
