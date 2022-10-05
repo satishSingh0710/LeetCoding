@@ -1,26 +1,28 @@
 class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
-        reverse(digits.begin(), digits.end());
-        int i = 0;
-        int carry = 0;
-        if (digits[i] + 1>9){
-            digits[0] = 0;
-            carry = 1;
-            i++;
-        }else if (digits[i]-'0'+1<=9){
-            digits[0] = digits[i]+1;
-        }
-        while(carry && i<digits.size()){
-            int sum = digits[i] + carry;
-            carry = sum / 10;
-            sum = sum%10;
-            digits[i] = sum;
-            i++;
+        bool all_9 = true;
+        for (auto &i: digits){
+            if (i!=9){
+                all_9 = false;
+            }
         }
         
-        if (carry){digits.push_back(1);}
-        reverse(digits.begin(),digits.end());
+        if (all_9){
+            digits.insert(digits.begin(),1);
+            for (auto &i: digits){
+                i = 0;
+            }
+            digits[0] = 1;
+        }else{
+            for (int i = digits.size()-1;i>=0;i--){
+                digits[i]++;
+                if(digits[i]==10){
+                    digits[i] = 0;
+                }else break;
+            }
+        }
+        
         return digits;
     }
 };
