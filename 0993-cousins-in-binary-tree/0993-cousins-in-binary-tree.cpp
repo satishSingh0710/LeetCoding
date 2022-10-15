@@ -11,27 +11,35 @@
  */
 class Solution {
 public:
-    int xDepth = 0, yDepth = 0;
-    bool siblings = false;
     bool isCousins(TreeNode* root, int x, int y) {
-        findDepth(root,x,y,0);
-        return (xDepth == yDepth && !siblings);
-    }
-    void findDepth(TreeNode * root, int &x, int &y, int depth){
-        if (!root || siblings) return;
-        if (xDepth!=0 && yDepth != 0) return;
-         if (root->right && root->left){
-             if ((root->left->val == x)&&(root->right->val==y) || (root->right->val == x && root->left->val == y)) {siblings = true; return;}     
-         }
+        queue<TreeNode * > q;
+        q.push(root);
+        while(!q.empty()){
+            bool fX = false, fY = false;
+            int size = q.size();
+            for (int i = 0;i<size;i++){
+                TreeNode *temp = q.front(); q.pop();
+                if (temp->left){
+                    q.push(temp->left);
+                    if (temp->left->val ==x) fX = true;
+                    if (temp->left->val == y) fY = true;
+                }
+                if(temp->right){
+                    q.push(temp->right);
+                    if (temp->right->val == y) fY = true;
+                    if (temp->right->val == x) fX = true;
+                }
+                
+            if (temp->left && temp->right){
+                  if((temp->left->val == x && temp->right->val == y) || (temp->left->val == y && temp->right->val == x)) return false;
+                 }
+             }
+            
+         if (fX && fY) return true;
+            if (fX) return false;
+            if (fY) return false;
+ }
         
-        
-        if(root->val == x){
-            xDepth = depth;
-        } else if (root->val == y){
-            yDepth = depth;
-        }
-        
-        findDepth(root->left, x,y,depth+1);
-        findDepth(root->right, x,y,depth+1);
+        return true;
     }
 };
