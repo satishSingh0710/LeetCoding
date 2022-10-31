@@ -1,26 +1,24 @@
 class Solution {
 public:
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<vector<int>> result;
-        vector<int> temp;
-        solve(candidates, target, result, 0, temp);
-        return result;
+    vector<vector<int>> combinationSum(vector<int>& can, int target) {
+        vector<vector<int>> fRes;
+        vector<int> res;
+        solve(can, fRes, res, target, 0);
+        return fRes;
     }
     
-    void solve(vector<int>& candidates, int target,vector<vector<int>> &result, int index, vector<int> temp){
-        if (index == candidates.size()){
-            if (target == 0){
-                result.push_back(temp); 
-            } 
-            return;
+    void solve(vector<int> &can, vector<vector<int>> &fres, vector<int> &res, int target, int index){
+        if (target == 0) {
+            fres.push_back(res); return;
         }
+       else  if (target<0) return;
         
-        if (candidates[index]<=target){
-            temp.push_back(candidates[index]);
-            solve(candidates, target - candidates[index], result, index, temp);
-            temp.pop_back();
+        for (int i = index;i<can.size();i++){
+            if (can[i]<=target){
+                res.push_back(can[i]);
+                solve(can, fres, res, target-can[i], i);
+                res.pop_back();
+            }
         }
-         
-        solve(candidates, target, result, index+1, temp);
     }
 };
