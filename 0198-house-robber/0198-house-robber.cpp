@@ -1,16 +1,16 @@
 class Solution {
 public:
-    int solve(vector<int> &nums, int index, vector<int>&dp){
-        if (index == 0) return nums[index];
-        if (index<0) return 0;
-        if (dp[index]!= -1) return dp[index];
-        int pick = nums[index] + solve(nums, index-2,dp);
-        int notPick = 0+ solve(nums, index-1, dp);
-        return dp[index] = max(pick, notPick);
-    }
     int rob(vector<int>& nums) {
         int n = nums.size();
         vector<int> dp(n, -1);
-        return solve(nums, n-1,dp);
+        dp[0] = nums[0];
+        for (int i =1 ;i<n;i++){
+            int take, notTake;
+            take = nums[i];
+            if (i>1){take+= dp[i-2];}
+            notTake = dp[i-1];
+            dp[i] = max(take, notTake);
+        }
+        return dp[n-1];
     }
 };
