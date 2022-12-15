@@ -1,16 +1,22 @@
 class Solution {
 public:
-    int rob(vector<int>& nums) {
-        int n = nums.size();
-        int prev = nums[0], prev2 = 0;
-        for (int i =1 ;i<n;i++){
-           int pick, notPick;
-            pick = nums[i] + prev2;
-            notPick = prev;
-            int curr = max(pick, notPick);
-            prev2 = prev;
-            prev = curr;
+    int solve(vector<int> &nums, int index,vector<int> &dp){
+        if (index>=nums.size()) return 0;
+        if (dp[index]!=-1) return dp[index];
+        int jump = index+2;
+        int loot = nums[index];
+        while(jump<nums.size()){
+           int tempLoot = nums[index] + solve(nums, jump, dp);
+           loot = max(loot, tempLoot);
+           jump++;
         }
-        return prev;
+        return dp[index] = loot;
+    }
+    int rob(vector<int>& nums) {
+        vector<int> dp(nums.size(), -1);
+        int first, second;
+        first = solve(nums, 0, dp);
+        second = solve(nums, 1, dp);
+        return max(first, second);
     }
 };
