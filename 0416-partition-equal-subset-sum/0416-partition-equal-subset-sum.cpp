@@ -26,11 +26,35 @@ public:
         if (sum % 2 != 0) return false;
         sum = sum/2;
        
-        vector<vector<int>> dp(nums.size()+1, vector<int>(sum+1, -1));
+        vector<vector<bool>> dp(nums.size(), vector<bool>(sum+1));
         
-        return test(nums,sum, dp, 0);
-
+        for (int i = 0;i<nums.size();i++){
+            for (int j = 0;j<=sum;j++){
+                if (j==0){
+                    dp[i][j] = true;
+                }
+                
+                if (i==0 && j!=0){
+                    dp[i][j] = false;
+                }
+            }
+        }
         
+        
+        for (int i = 1;i<nums.size();i++){
+            for (int j = 1;j<=sum;j++){
+                if (nums[i-1]<=j){
+                    dp[i][j] = dp[i-1][j - nums[i-1]] || dp[i-1][j];
+                }else{
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        
+  
+        
+       return dp[nums.size()-1][sum];
+      
         
     }
 };
