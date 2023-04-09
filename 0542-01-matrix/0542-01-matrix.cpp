@@ -1,30 +1,24 @@
 class Solution {
 public:
     queue<pair<pair<int,int>, int>> q;
-    void bfs(vector<vector<int>> &mat, vector<vector<int>> &visited, vector<vector<int>> &dist){
-       int n = mat.size(); 
-        int m = mat[0].size();
+    void bfs(vector<vector<int>> &mat, vector<vector<int>> &vis, vector<vector<int>> &res){
         while(!q.empty()){
-           auto temp = q.front();
+            auto val = q.front();
             q.pop();
-            int row = temp.first.first;
-            int col = temp.first.second;
-            int steps = temp.second;
-            dist[row][col ]  =steps;
-            int a[] = {0,1,0,-1};
+            int row = val.first.first, col = val.first.second;
+           // cout<<row<<" "<<col<<endl;
+          res[row][col] = val.second;
+            int dist = res[row][col];
+              int a[] = {0,1,0,-1};
             int b[] = {1,0,-1,0};
-            
             for (int i = 0;i<4;i++){
-                int nrow = row + a[i];
-                int ncol = col + b[i];
-                
-                if (nrow>=0 && ncol>=0 && nrow<n && ncol<m && visited[nrow][ncol]==-1){
-                    visited[nrow][ncol] =1;
-                    q.push({{nrow,ncol},steps+1});
-                }
+                int newRow = row + a[i], newCol = col + b[i];
+                if (newRow < 0 || newCol < 0 || newRow>=mat.size()||newCol>=mat[0].size()) continue;
+                if (vis[newRow][newCol] == 1) continue;
+                q.push({{newRow, newCol},dist + 1});
+                vis[newRow][newCol] = 1;
             }
-             
-    }
+        }    
     }
     
     
