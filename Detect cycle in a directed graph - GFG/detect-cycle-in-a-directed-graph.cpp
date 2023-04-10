@@ -5,14 +5,13 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    bool dfs(vector<int> &visited, vector<int> &pathVisited,vector<int> adj[], int node){
+    bool dfs(vector<int> &visited,vector<int> adj[], int node){
         for (auto &i: adj[node]){
             if (visited[i] == -1){
+                visited[i] = 2;
+               if ( dfs(visited, adj, i) ) return true; 
                 visited[i] = 1;
-                pathVisited[i] = 1;
-               if ( dfs(visited, pathVisited, adj, i) ) return true; 
-                pathVisited[i] = -1;
-            }else if (visited[i] == 1 && pathVisited[i] == 1){
+            }else if ( visited[i] == 2){
                 return true;
             }
         }
@@ -24,10 +23,9 @@ class Solution {
         vector<int> pathVisited(V, -1), visited(V, -1);
         for (int i = 0;i<V;i++){
             if (visited[i] == -1){
+                visited[i] = 2;
+                if (dfs(visited,adj,i)) return true;
                 visited[i] = 1;
-                pathVisited[i] = 1;
-                if (dfs(visited, pathVisited,adj,i)) return true;
-                pathVisited[i] = -1;
             }
         }
         return false;
