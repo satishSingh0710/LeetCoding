@@ -1,31 +1,30 @@
 class Solution {
 public:
-    int max(int a, int b) {
-        if(a < b) {
-            return b;
-        }
-        return a;
+    int maxxLength  = INT_MIN;
+    void solve(vector<string> &arr, int index, string curr, unordered_map<char,int> mp){
+       if (index == arr.size()){
+          maxxLength = max(maxxLength, (int)curr.size());
+          return;
+       }
+      
+       bool cant = false;
+       unordered_map<char,int> mp2 = mp;
+       for (auto &i: arr[index]){
+         mp2[i]++;
+         if (mp2[i] == 2){
+           cant = true; break;
+         }
+       }
+       if(cant== false){
+           solve(arr, index+1, curr + arr[index],mp2);
+       }
+
+       solve(arr, index+1, curr,mp);
+      
     }
-    int ans = 0;
     int maxLength(vector<string>& arr) {
-        string curr;
-        backtrack(arr, 0, curr);
-        return ans;
-    }
-    
-    void backtrack(vector<string>& arr, int i, string curr) {
-        vector<int> count(26,0);
-        for(int j = 0; j < curr.size(); j++) {
-            if(count[curr[j]-'a'] >= 1) {
-                return;
-            }
-            count[curr[j]-'a']++;
-        }
-        if(i >= arr.size()) {
-            ans = max(ans, curr.size());
-            return;
-        }
-        backtrack(arr, i+1, curr);
-        backtrack(arr, i+1, curr+arr[i]);
+        unordered_map<char,int> mp;
+         solve(arr,0,"",mp);
+         return maxxLength;
     }
 };
