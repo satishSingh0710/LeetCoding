@@ -1,24 +1,25 @@
 class Solution {
 public:
+    int M = 1000000007;
     int numSubseq(vector<int>& nums, int target) {
-        sort(nums.begin(),nums.end());
-        int res = 0;
-        int i= 0, j = nums.size()-1;
-         vector<int> twopower{1}; //precompute pow of 2 
-        
-        for(int i = 0;i<nums.size();i++){
-            twopower.push_back((twopower.back()*2)%1000000007);
+        sort(nums.begin(), nums.end()); 
+        int l = 0, r = nums.size()-1;
+        vector<int> preTwo;
+        preTwo.push_back(1);
+        for (int i = 1;i<nums.size();i++){
+            int newNum = (preTwo.back()%M * 2)%M;
+            preTwo.push_back(newNum);
         }
-        while(i<=j){
-            int sum = nums[i] + nums[j];
-            if (sum > target){
-                j--; continue;
-            } 
-            int expo = j - i;
-            res =(res +twopower[expo])%1000000007;
-            i++;
+        long long int answer = 0; 
+        while(l<=r){
+            int currSum = nums[l] + nums[r];
+            if(currSum>target){
+                r--; continue;
+            }else{
+                answer = (answer%M + preTwo[r-l]%M)%M;
+                l++;
+            }
         }
-        
-        return res;
+        return answer;
     }
 };
