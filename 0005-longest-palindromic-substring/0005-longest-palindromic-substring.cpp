@@ -1,41 +1,37 @@
 class Solution {
 public:
-    // int solve(string &s, int l, int r, vector<vector<int>> &dp){
-    //     if (l>r) return 0;
-    //     if (s[l] == s[r]){
-    //         if (l == r) return dp[l][r] = 1;
-    //         return dp[l][r] = 2 + solve(s, l+1, r-1,dp);
-    //     }
-    //     else return  dp[l][r] = max(0 + solve(s, l+1,r,dp), 0 + solve(s, l, r-1,dp));
-    // }
     string longestPalindrome(string s) {
-        vector<vector<bool>> store(s.size(), vector<bool> (s.size(), false));
-        for (int i = 0;i<s.size();i++){
-            int row = 0, col = i;
-            while(col < s.size() && row < s.size()){
-                if(col - row == 0){
-                    if (s[col] == s[row]) store[row][col] = true;
-                }else if (col - row == 1){
-                    if (s[row] == s[col]) store[row][col] = true;
+        int n = s.size(); 
+        vector<vector<int>> dp(n, vector<int>(n, -1)); 
+        // for odd length palindromes 
+        for (int i = 0;i<n;i++){
+            for (int j = 0;i+j<n && i-j >= 0;j++){
+                if(s[i-j] == s[i+j]){
+                    dp[i-j][i+j] = 1;  
                 }else{
-                    if (s[row] == s[col]){
-                        store[row][col] = store[row+1][col-1];
-                    }
-                }
-                row++; col++;
-            }
-        }
-        string res = "";
-        for (int i = 0;i<s.size();i++){
-            for (int j = 0;j<s.size();j++){
-                if (i>j) continue;
-                if (j - i + 1 > res.size() && store[i][j]  == true){
-                    res = s.substr(i, j - i +1);
+                    break;
                 }
             }
         }
-        
-        return res;
-        
+        // for even length palindromes 
+        for (int i = 0;i<n-1;i++){
+            for (int j = 0;j<n && i-j>=0 && (i+j+1)<n;j++){
+                if(s[i-j] == s[i+j+1]){
+                    dp[i-j][i+j+1] = 1; 
+                }else{
+                    break;
+                }
+            }
+        }
+        int st = 0, ed = 0; 
+        for(int i = 0;i<n;i++){
+            for (int j = i;j<n;j++){
+                if(dp[i][j] == 1 && j-i > ed - st){
+                    ed = j; 
+                    st = i; 
+                }
+            }
+        }
+        return s.substr(st, ed-st+1); 
     }
 };
